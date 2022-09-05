@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomReport", "CustomReport\CustomReport.csproj", "{91828181-14ED-4F0F-9CFC-D815C43F02CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomReport", "CustomReport\CustomReport.csproj", "{91828181-14ED-4F0F-9CFC-D815C43F02CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallReportUI", "..\CallReportUI\CallReportUI\CallReportUI.csproj", "{0FC22729-99FC-4C71-BAB9-437E325662F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{91828181-14ED-4F0F-9CFC-D815C43F02CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91828181-14ED-4F0F-9CFC-D815C43F02CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91828181-14ED-4F0F-9CFC-D815C43F02CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
