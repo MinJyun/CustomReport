@@ -6,7 +6,7 @@ namespace CustomReport
     /// <summary>
     /// 自訂報表
     /// </summary>
-    public class CustomReportClient
+    public class CustomReportClient: ICustomReportClient
     {
         /// <summary>
         /// 自訂報表IP

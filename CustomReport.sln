@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomReport", "CustomRepor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallReportUI", "..\CallReportUI\CallReportUI\CallReportUI.csproj", "{0FC22729-99FC-4C71-BAB9-437E325662F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{15E4D212-649F-441B-AA9C-751EBCE5421C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomReportTests", "CustomReportTests\CustomReportTests.csproj", "{D12FB4D8-9700-4361-9ECE-D1BC19B1043C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FC22729-99FC-4C71-BAB9-437E325662F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E4D212-649F-441B-AA9C-751EBCE5421C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E4D212-649F-441B-AA9C-751EBCE5421C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E4D212-649F-441B-AA9C-751EBCE5421C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E4D212-649F-441B-AA9C-751EBCE5421C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D12FB4D8-9700-4361-9ECE-D1BC19B1043C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D12FB4D8-9700-4361-9ECE-D1BC19B1043C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D12FB4D8-9700-4361-9ECE-D1BC19B1043C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D12FB4D8-9700-4361-9ECE-D1BC19B1043C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
