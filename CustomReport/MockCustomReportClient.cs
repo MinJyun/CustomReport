@@ -55,8 +55,7 @@ namespace CustomReport
         /// <returns></returns>
         public async Task<CustomReportResponse> PostAsync(long dtno, long ftno, string @params, string assignSpid, string keyMap)
         {
-            var value = Interlocked.Increment(ref PrivateSimultaneousRequest);
-            if (value <= MaxRequest)
+            if (Interlocked.Increment(ref PrivateSimultaneousRequest) <= MaxRequest)
             {
                 await Task.Delay(AverageResponseTime);
                 Interlocked.Decrement(ref PrivateSimultaneousRequest);
