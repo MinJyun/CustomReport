@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CustomReport
+﻿namespace CustomReport
 {
     /// <summary>
     /// 回傳的類別
