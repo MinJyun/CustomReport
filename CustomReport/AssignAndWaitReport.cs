@@ -10,7 +10,7 @@ namespace CustomReport
         /// <summary>
         /// 指定的自訂報表主機群
         /// </summary>
-        private ConcurrentQueue<ICustomReportClient> CustomReportClients = new ConcurrentQueue<ICustomReportClient>();
+        private ConcurrentQueue<ICustomReportClient> CustomReportClients;
 
         /// <summary>
         /// 跨執行緒的鎖定
@@ -23,14 +23,10 @@ namespace CustomReport
         /// <param name="customReportClients">自訂報表主機</param>
         public AssignAndWaitReport(List<KeyValuePair<int, ICustomReportClient>> assignServers)
         {
-            assignServers.ForEach(eachServer => 
-            { 
-                Enumerable.Range(0, eachServer.Key).Select(maxRequest => 
-                {
-                    CustomReportClients.Enqueue(eachServer.Value);
-                    return 0; 
-                }).ToList(); 
-            });
+            CustomReportClients = new ConcurrentQueue<ICustomReportClient>( 
+                assignServers
+                .SelectMany( keyValuePair => Enumerable.Range( 0, keyValuePair.Key )
+                .Select( _ => keyValuePair.Value ) ) );
             ThreadLock = new SemaphoreSlim(CustomReportClients.Count);
         } 
 
@@ -45,16 +41,16 @@ namespace CustomReport
         /// <returns>回傳內容</returns>
         public async Task<CustomReportResponse> PostAsync(long dtno, long ftno, string @params, string assignSpid, string keyMap)
         {
+            await ThreadLock.WaitAsync();
+            CustomReportClients.TryDequeue(out ICustomReportClient cstomReportClient);
             try
             {
-                await ThreadLock.WaitAsync();
-                CustomReportClients.TryDequeue(out ICustomReportClient cstomReportClient);
-                var response = await Task.Run(() => cstomReportClient.PostAsync(dtno, ftno, @params, assignSpid, keyMap));
-                CustomReportClients.Enqueue(cstomReportClient);
+                var response = await cstomReportClient.PostAsync(dtno, ftno, @params, assignSpid, keyMap);               
                 return response;
             }
             finally 
             {
+                CustomReportClients.Enqueue(cstomReportClient);
                 ThreadLock.Release();
             }
         }
