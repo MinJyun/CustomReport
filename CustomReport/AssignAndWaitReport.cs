@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 namespace CustomReport
 {
@@ -14,23 +10,29 @@ namespace CustomReport
         /// <summary>
         /// 指定的自訂報表主機群
         /// </summary>
-        private List<ICustomReportClient> CustomReportClients;
-
-        SemaphoreSlim Sema = new SemaphoreSlim(1);
+        private ConcurrentQueue<ICustomReportClient> CustomReportClients = new ConcurrentQueue<ICustomReportClient>();
 
         /// <summary>
-        /// 請求任務
+        /// 跨執行緒的鎖定
         /// </summary>
-        private List<Task<CustomReportResponse>> RequestTasks = new List<Task<CustomReportResponse>>();
+        private SemaphoreSlim ThreadLock;
 
         /// <summary>
         /// 建構子
         /// </summary>
-        /// <param name="customReportClients"></param>
-        public AssignAndWaitReport(List<ICustomReportClient> customReportClients)
+        /// <param name="customReportClients">自訂報表主機</param>
+        public AssignAndWaitReport(List<KeyValuePair<int, ICustomReportClient>> assignServers)
         {
-            CustomReportClients = customReportClients.ToList();
-        }
+            assignServers.ForEach(eachServer => 
+            { 
+                Enumerable.Range(0, eachServer.Key).Select(maxRequest => 
+                {
+                    CustomReportClients.Enqueue(eachServer.Value);
+                    return 0; 
+                }).ToList(); 
+            });
+            ThreadLock = new SemaphoreSlim(CustomReportClients.Count);
+        } 
 
         /// <summary>
         /// 非同步等待請求
@@ -43,21 +45,18 @@ namespace CustomReport
         /// <returns>回傳內容</returns>
         public async Task<CustomReportResponse> PostAsync(long dtno, long ftno, string @params, string assignSpid, string keyMap)
         {
-            await Sema.WaitAsync();
-            int index;
-            if (RequestTasks.Count < CustomReportClients.Count)
+            try
             {
-                index = RequestTasks.Count;
-                RequestTasks.Add(Task.Run(() => CustomReportClients[index].PostAsync(dtno, ftno, @params, assignSpid, keyMap)));
+                await ThreadLock.WaitAsync();
+                CustomReportClients.TryDequeue(out ICustomReportClient cstomReportClient);
+                var response = await Task.Run(() => cstomReportClient.PostAsync(dtno, ftno, @params, assignSpid, keyMap));
+                CustomReportClients.Enqueue(cstomReportClient);
+                return response;
             }
-            else
+            finally 
             {
-                await Task.WhenAny(RequestTasks);
-                index = RequestTasks.FindIndex(x => x.IsCompletedSuccessfully);
-                RequestTasks[index] = Task.Run(() => CustomReportClients[index].PostAsync(dtno, ftno, @params, assignSpid, keyMap));
+                ThreadLock.Release();
             }
-            Sema.Release();
-            return await RequestTasks[index];
         }
     }
 }
